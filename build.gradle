@@ -29,7 +29,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 
-group = 'com.jrl.springboot'
+group = 'com.jrl.employeetracker'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 
