@@ -3,6 +3,9 @@ package com.jrl.employeetracker.rest.exception;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement(name = "error")
 public class ErrorResponse {
 	
 	private String errorMessage;
