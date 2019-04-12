@@ -46,6 +46,7 @@ dependencies {
 	compile group: 'io.swagger', name: 'swagger-annotations', version: '1.5.9'
 	compile ('javax.xml.bind:jaxb-api:2.2.4')
     compile('org.springframework.boot:spring-boot-devtools')
+    compile('org.springframework.boot:spring-boot-starter-log4j2')
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
@@ -55,4 +56,10 @@ repositories {
     // You can declare any Maven/Ivy/file repository here.
     jcenter()
     mavenCentral()
+}
+
+configurations {
+	all {
+		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+	}
 }

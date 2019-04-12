@@ -4,6 +4,8 @@ import java.net.URI;
 
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +27,7 @@ import com.jrl.employeetracker.rest.model.Employees;
 @RequestMapping(path = "/employees")
 public class EmployeeController {
 	
+	private static final Logger logger = LoggerFactory.getLogger(EmployeeController.class);
 	@Autowired
 	private EmployeeDAO employeeDao;
 	
@@ -33,9 +36,9 @@ public class EmployeeController {
 		return employeeDao.getAllEmployees();
 	}
 	
-	@GetMapping(value = "/employees/{id}")
+	@GetMapping(value = "/{id}")
 	public ResponseEntity<Employee> getEmployeeById(@PathVariable("id") int id) {
-		System.out.println("id = " + id);
+		logger.debug("in mapping /employees/{" + id + "}");
 		Employee employee = EmployeeDAO.getEmployeeById(id);
 		
 		if (employee == null) {
@@ -44,24 +47,7 @@ public class EmployeeController {
 		return new ResponseEntity<Employee>(employee, HttpStatus.OK);
 	}
 	
-//	@PostMapping(path = "/", consumes = "application/json", produces = "application/json")
-//	public ResponseEntity<Object> addEmployee(
-//	        @RequestHeader(name = "X-COM-PERSIST", required = true) String headerPersist,
-//	        @RequestHeader(name = "X-COM-LOCATION", required = false, defaultValue = "ASIA") 
-//	        String headerLocation,
-//	        @RequestBody Employee employee) throws Exception {
-//		
-//		employeeDao.addEmployee(employee);
-//		
-//		URI location = ServletUriComponentsBuilder.fromCurrentRequest()
-//				.path("/{id}")
-//				.buildAndExpand(employee.getId())
-//				.toUri();
-//				
-//		return ResponseEntity.created(location).build();
-//	}
-	
-	@PostMapping(value = "/employees")
+	@PostMapping(value = "/")
 	public ResponseEntity<Employee> addEmployee (@Valid @RequestBody Employee employee) {
 		employeeDao.addEmployee(employee);
 		return new ResponseEntity<Employee>(employee, HttpStatus.OK);
