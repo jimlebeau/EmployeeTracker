@@ -1,5 +1,7 @@
 package com.jrl.employeetracker.rest.dao;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.jrl.employeetracker.rest.model.Employee;
@@ -7,6 +9,8 @@ import com.jrl.employeetracker.rest.model.Employees;
 
 @Repository
 public class EmployeeDAO {
+	
+	private static final Logger logger = LoggerFactory.getLogger(EmployeeDAO.class);
 
 	private static Employees list = new Employees();
 	
@@ -30,13 +34,12 @@ public class EmployeeDAO {
 	}
 	
 	public static Employee getEmployeeById(int id) {
-		System.out.println("getEmployeeById = " + id);
-		System.out.println(list.getEmployeeMap().containsKey(id));
-		if (list.getEmployeeMap().containsKey(id)) {
+		logger.debug("Employee id = " + id);
+		if (!list.getEmployeeMap().containsKey(id)) {
+			logger.debug("Employee not found - returning null");
 			return null;
 		} else {
-			return list.getEmployeeById(id);
-			
+			return list.getEmployeeById(id);			
 		}
 	}
 	
