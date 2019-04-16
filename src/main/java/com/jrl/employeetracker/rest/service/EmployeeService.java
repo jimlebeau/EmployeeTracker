@@ -2,27 +2,27 @@ package com.jrl.employeetracker.rest.service;
 
 import java.util.List;
 
-import javax.inject.Inject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.jrl.employeetracker.rest.dao.EmployeeDAO;
 import com.jrl.employeetracker.rest.model.Employee;
 import com.jrl.employeetracker.rest.model.Employees;
 
+@Service
 public class EmployeeService {
 	
-	@Inject
 	private EmployeeDAO dao;
 
-	public EmployeeService() {
-		
+	public EmployeeService(EmployeeDAO dao) {
+		this.dao = dao;
 	}
 	
+	@Autowired
 	public void initializeEmployees() {
 		Employee employee1 = new Employee(1, "Lokesh", "Gupta", "lokesh@gmail.com");
 		Employee employee2 = new Employee(2, "Alex", "Kolenchiskey", "abc@gmail.com");
 		Employee employee3 = new Employee(3, "David", "Kameron", "titanic@gmail.com");
-		
-		dao  = new EmployeeDAO();
 
 		dao.addEmployee(employee1);
 		dao.addEmployee(employee2);

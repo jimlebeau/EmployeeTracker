@@ -27,15 +27,15 @@ public class EmployeeServiceTest {
 	private EmployeeDAO dao;
 	
 	@InjectMocks
-	EmployeeService service;
+	private EmployeeService service;
 	
 	@Before
 	public void setup() {
-		MockitoAnnotations.initMocks(this);
-//		dao = Mockito.mock(EmployeeDAO.class);
+		dao = Mockito.mock(EmployeeDAO.class);
+		service = new EmployeeService(dao);
+		
 	}
 	
-	@Ignore
 	@Test
 	public void getAllEmployeesSucess() throws Exception {
 		
@@ -49,28 +49,25 @@ public class EmployeeServiceTest {
 		
 		Mockito.when(dao.getAllEmployees()).thenReturn(employeeList);
 		
-		service = new EmployeeService();
-		
 		assertThat(service.getAllEmployees(), hasSize(3));
 		
 	}
 	
 	@Test
 	public void addEmployeeSuccess() throws Exception {
+		Employee employee4 = new Employee(4, "Lokesh", "Gupta", "lokesh@gmail.com");
+		Mockito.when(dao.getEmployeeById(4)).thenReturn(employee4);
+		Employee employee = service.getEmployeeById(4);
+		assertThat(employee.getEmployeeId(), equalTo(4));
 		
 	}
 	
-	@Ignore
 	@Test
 	public void getEmployeeByIdSuccess() throws Exception {
-		Employee employee1 = new Employee(1, "Lokesh", "Gupta", "lokesh@gmail.com");
-		
-		Mockito.when(dao.getEmployeeById(1)).thenReturn(employee1);
-		
-		service = new EmployeeService();
-		
+		Employee employee1 = new Employee(1, "Lokesh", "Gupta", "lokesh@gmail.com");		
+		Mockito.when(dao.getEmployeeById(1)).thenReturn(employee1);		
 		Employee employee = service.getEmployeeById(1);
-		
+				
 		assertThat(employee.getEmployeeId(), equalTo(1));
 	}
 	
