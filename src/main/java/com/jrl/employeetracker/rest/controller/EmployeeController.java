@@ -1,7 +1,5 @@
 package com.jrl.employeetracker.rest.controller;
 
-import java.net.URI;
-
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -16,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.jrl.employeetracker.rest.dao.EmployeeDAO;
 import com.jrl.employeetracker.rest.exception.RecordNotFoundException;
 import com.jrl.employeetracker.rest.model.Employee;
 import com.jrl.employeetracker.rest.model.Employees;
@@ -26,8 +25,11 @@ import com.jrl.employeetracker.rest.service.EmployeeService;
 public class EmployeeController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(EmployeeController.class);
+
+	private EmployeeDAO dao = new EmployeeDAO();
+	
 	@Autowired
-	private EmployeeService employeeService = new EmployeeService();
+	private EmployeeService employeeService = new EmployeeService(dao);
 	
 	@GetMapping(path  = "/", produces = "application/json")
 	public Employees getEmployees() {
