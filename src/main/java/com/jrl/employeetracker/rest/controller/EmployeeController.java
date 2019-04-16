@@ -13,15 +13,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.jrl.employeetracker.rest.dao.EmployeeDAO;
 import com.jrl.employeetracker.rest.exception.RecordNotFoundException;
 import com.jrl.employeetracker.rest.model.Employee;
 import com.jrl.employeetracker.rest.model.Employees;
+import com.jrl.employeetracker.rest.service.EmployeeService;
 
 @RestController
 @RequestMapping(path = "/employees")
@@ -29,17 +27,17 @@ public class EmployeeController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(EmployeeController.class);
 	@Autowired
-	private EmployeeDAO employeeDao;
+	private EmployeeService employeeService = new EmployeeService();
 	
 	@GetMapping(path  = "/", produces = "application/json")
 	public Employees getEmployees() {
-		return employeeDao.getAllEmployees();
+		return employeeService.getEmployees();
 	}
 	
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<Employee> getEmployeeById(@PathVariable("id") int id) {
 		logger.debug("in mapping /employees/{" + id + "}");
-		Employee employee = EmployeeDAO.getEmployeeById(id);
+		Employee employee = employeeService.getEmployeeById(id);
 		
 		if (employee == null) {
 			throw new RecordNotFoundException("Invalid Employee id :" + id);
@@ -49,7 +47,7 @@ public class EmployeeController {
 	
 	@PostMapping(value = "/")
 	public ResponseEntity<Employee> addEmployee (@Valid @RequestBody Employee employee) {
-		employeeDao.addEmployee(employee);
+		employeeService.addEmployee(employee);
 		return new ResponseEntity<Employee>(employee, HttpStatus.OK);
 	}
 

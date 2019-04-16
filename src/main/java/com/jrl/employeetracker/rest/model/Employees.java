@@ -1,27 +1,25 @@
 package com.jrl.employeetracker.rest.model;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Employees {
 	
-	private Map<Integer, Employee> employeeMap = new HashMap<>();
+	private List<Employee> employees = new ArrayList<>();
 	
-	public Map<Integer, Employee> getEmployeeMap() {
-		if (employeeMap.isEmpty())
-			employeeMap = new HashMap<>();
-		return employeeMap;
-	}
-	
-	public void setEmployeeList(Map<Integer, Employee> employeeMap) {
-		this.employeeMap = employeeMap;
-	}
 
-	public Employee getEmployeeById(int id) {
-		if (employeeMap.containsKey(id)) {
-			return employeeMap.get(id);
-		} else {
-			return null;
+	public void setEmployees(List<Employee> employees) {
+		this.employees = employees;
+	}
+	
+	public List<Employee> getEmployees() {
+		if (employees.isEmpty()) {
+			employees = new ArrayList<>();
 		}
+		return employees;
+	}
+	
+	public void addEmployee(Employee employee) {
+		employees.add(employee);
 	}
 }

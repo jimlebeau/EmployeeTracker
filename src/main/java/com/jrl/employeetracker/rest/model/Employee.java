@@ -3,8 +3,6 @@ package com.jrl.employeetracker.rest.model;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import org.springframework.hateoas.ResourceSupport;
-
 import java.io.Serializable;
 
 import javax.validation.constraints.Email;
