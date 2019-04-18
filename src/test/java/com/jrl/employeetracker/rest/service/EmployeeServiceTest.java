@@ -4,13 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.hamcrest.Matchers.equalTo;
@@ -69,10 +67,5 @@ public class EmployeeServiceTest {
 		Employee employee = service.getEmployeeById(1);
 				
 		assertThat(employee.getEmployeeId(), equalTo(1));
-	}
-	
-	@Test
-	public void getEmployeesSuccess() throws Exception {
-
 	}
 }
