@@ -41,7 +41,7 @@ public class EmployeeController {
 	
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<Employee> getEmployeeById(@PathVariable("id") int id) {
-		logger.debug("in mapping /employees/{" + id + "}");
+//		logger.debug("in mapping /employees/{" + id + "}");
 		Employee employee = service.getEmployeeById(id);
 		
 		return new ResponseEntity<Employee>(employee, HttpStatus.OK);
