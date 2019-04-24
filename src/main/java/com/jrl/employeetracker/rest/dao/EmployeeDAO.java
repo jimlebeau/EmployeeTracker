@@ -19,53 +19,53 @@ import com.jrl.employeetracker.rest.model.EmployeeRowMapper;
 public class EmployeeDAO implements IEmployeeDAO {
 	
 	private static final Logger logger = LoggerFactory.getLogger(EmployeeDAO.class);
-
+	private final String GET_SQL = "SELECT EmployeeId, FirstName, LastName, Email FROM Employees";
+	private final String GET_SQL_BY_ID = "SELECT EmployeeId, FirstName, LastName, Email FROM Employees WHERE EmployeeId = ?";
+	private final String GET_SQL_BY_LAST_NAME = "SELECT EmployeeId FROM Employees WHERE LastName = ?";
+	private final String ADD_SQL = "INSERT INTO Employees (FirstName, LastName, Email) values (?, ?, ?)";
+	private final String UPDATE_SQL = "UPDATE Employees SET FirstName=?, LastName=?, Email=? WHERE EmployeeId=?";
+	private final String DELETE_SQL = "DELETE FROM Employees WHERE EmployeeId=?";
+	private final String EXISTS_SQL =  "SELECT count(*) FROM Employees WHERE LastName = ?";
+	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 		
 	@Override
 	public List<Employee> getAllEmployees() {
-		String sql = "SELECT EmployeeId, FirstName, LastName, Email FROM Employees";
 		RowMapper<Employee> rowMapper = new EmployeeRowMapper();
-		return this.jdbcTemplate.query(sql, rowMapper);
+		return this.jdbcTemplate.query(GET_SQL, rowMapper);
 	}
 	
 	@Override
 	public Employee getEmployeeById(int id) {
-		String sql = "SELECT EmployeeId, FirstName, LastName, Email FROM Employees WHERE EmployeeId = ?";
 		RowMapper<Employee> rowMapper = new BeanPropertyRowMapper<Employee>(Employee.class);
-		Employee employee = jdbcTemplate.queryForObject(sql, rowMapper, id);
+		Employee employee = jdbcTemplate.queryForObject(GET_SQL_BY_ID, rowMapper, id);
 		return employee;
 	}
 	
 	@Override
 	public void addEmployee(Employee employee) {
-		String sql = "INSERT INTO Employees (FirstName, LastName, Email) values (?, ?, ?)";
-		jdbcTemplate.update(sql, employee.getFirstName(), employee.getLastName(), employee.getEmail());
+		jdbcTemplate.update(ADD_SQL, employee.getFirstName(), employee.getLastName(), employee.getEmail());
 		
-		sql = "SELECT EmployeeId FROM Employees WHERE LastName = ?";
-		int employeeId = jdbcTemplate.queryForObject(sql,  Integer.class, employee.getLastName());
+		int employeeId = jdbcTemplate.queryForObject(GET_SQL_BY_LAST_NAME,  Integer.class, employee.getLastName());
 		
 		employee.setEmployeeId(employeeId);
 	}
 	
 	@Override
 	public void updateEmployee(Employee employee) {
-		String sql = "UPDATE Employees SET FirstName=?, LastName=?, Email=? WHERE EmployeeId=?";
-		jdbcTemplate.update(sql, employee.getFirstName(), employee.getLastName(), employee.getEmail(), employee.getEmployeeId());
+		jdbcTemplate.update(UPDATE_SQL, employee.getFirstName(), employee.getLastName(), employee.getEmail(), employee.getEmployeeId());
 
 	}
 
 	@Override
 	public void deleteEmployee(int employeeId) {
-		String sql = "DELETE FROM Employees WHERE EmployeeId=?";
-		jdbcTemplate.update(sql, employeeId);		
+		jdbcTemplate.update(DELETE_SQL, employeeId);		
 	}
 
 	@Override
 	public boolean employeeExists(String lastName) {
-		String sql = "SELECT count(*) FROM Employees WHERE LastName = ?";
-		int count = jdbcTemplate.queryForObject(sql, Integer.class, lastName);
+		int count = jdbcTemplate.queryForObject(EXISTS_SQL, Integer.class, lastName);
 		if (count == 0) {
 			return false;
 		} else {
