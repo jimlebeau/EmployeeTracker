@@ -88,21 +88,45 @@ public class EmployeeControllerTest {
 	
 	@Test
 	public void testUpdateEmployeeSuccess() throws Exception {
+		Mockito.when(service.updateEmployee(any(Employee.class))).thenReturn(Boolean.TRUE);
+		String employeeString = mapper.writeValueAsString(employee);
 		
-		Mockito.doNothing().when(service).updateEmployee(employee);
-		String actual = mapper.writeValueAsString(employee);
-		this.mvc.perform( MockMvcRequestBuilders
+		RequestBuilder request = MockMvcRequestBuilders
 				.put("/employees/")
-				.content(actual)
+				.content(employeeString)
 				.contentType(MediaType.APPLICATION_JSON)
-				.accept(MediaType.APPLICATION_JSON))
-		.andExpect(status().isOk());
+				.accept(MediaType.APPLICATION_JSON);
+		
+		MvcResult result = mvc.perform(request).andReturn();
+				
+		MockHttpServletResponse response = result.getResponse();
+		
+		assertEquals(HttpStatus.OK.value(), response.getStatus());
+		
+	}
+	
+	@Test
+	public void testUpdateEmployeeNotModified() throws Exception {
+		Mockito.when(service.updateEmployee(any(Employee.class))).thenReturn(Boolean.FALSE);
+		String employeeString = mapper.writeValueAsString(employee);
+		
+		RequestBuilder request = MockMvcRequestBuilders
+				.put("/employees/")
+				.content(employeeString)
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON);
+		
+		MvcResult result = mvc.perform(request).andReturn();
+				
+		MockHttpServletResponse response = result.getResponse();
+		
+		assertEquals(HttpStatus.NOT_MODIFIED.value(), response.getStatus());
 		
 	}
 	
 	@Test
 	public void testAddEmployeeSuccess() throws Exception {
-		Mockito.when(service.addEmployee(any(Employee.class))).thenReturn(true);
+		Mockito.when(service.addEmployee(any(Employee.class))).thenReturn(Boolean.TRUE);
 		String actual = mapper.writeValueAsString(employee);
 		
 		RequestBuilder requestBuilder = MockMvcRequestBuilders
@@ -116,6 +140,25 @@ public class EmployeeControllerTest {
 		MockHttpServletResponse response = result.getResponse();
 		
 		assertEquals(HttpStatus.CREATED.value(), response.getStatus());
+		
+	}
+	
+	@Test
+	public void testAddEmployeeConflict() throws Exception {
+		Mockito.when(service.addEmployee(any(Employee.class))).thenReturn(Boolean.FALSE);
+		String actual = mapper.writeValueAsString(employee);
+		
+		RequestBuilder requestBuilder = MockMvcRequestBuilders
+				.post("/employees/")
+				.content(actual)
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON);
+				
+		MvcResult result = mvc.perform(requestBuilder).andReturn();
+		
+		MockHttpServletResponse response = result.getResponse();
+		
+		assertEquals(HttpStatus.CONFLICT.value(), response.getStatus());
 		
 	}
 	

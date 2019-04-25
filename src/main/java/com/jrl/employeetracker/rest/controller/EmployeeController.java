@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.jrl.employeetracker.rest.exception.RecordNotFoundException;
 import com.jrl.employeetracker.rest.model.Employee;
 import com.jrl.employeetracker.rest.service.IEmployeeService;
 
@@ -62,8 +61,13 @@ public class EmployeeController {
 	
 	@PutMapping(value = "/")
 	public ResponseEntity<Employee> updateEmployee (@Valid @RequestBody Employee employee) {
-		service.updateEmployee(employee);
-		return new ResponseEntity<Employee>(employee, HttpStatus.OK);
+		
+		boolean flag = service.updateEmployee(employee);
+		if (flag == Boolean.FALSE) {
+			return new ResponseEntity<Employee>(HttpStatus.NOT_MODIFIED);
+		} else {
+			return new ResponseEntity<Employee>(employee, HttpStatus.OK);
+		}
 	}
 	
 	@DeleteMapping("/{id}")
