@@ -1,14 +1,11 @@
 package com.jrl.employeetracker.rest.dao;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -70,16 +67,35 @@ public class EmployeeDAOTest {
 		
 	}
 
-	@Ignore
 	@Test
 	public void updateEmployee_shouldUpdateEmployee() {
+		String newEmail = "newEmail.com";
+		dao.addEmployee(emp1);
+		emp1.setEmail(newEmail);
+		dao.updateEmployee(emp1);
+		assertThat(emp1.getEmail(), equalTo(newEmail));
 		
 	}
 	
-	@Ignore
 	@Test
 	public void deleteEmployee_shouldDeleteEmployee() {
+		dao.addEmployee(emp1);
+		dao.addEmployee(emp2);
+		dao.deleteEmployee(emp1.getEmployeeId());
+		assertThat(dao.employeeExists(emp1.getLastName()), equalTo(Boolean.FALSE));
+		
+	}
+	
+	@Test
+	public void employeeExists_shouldReturnTrue() {
+		dao.addEmployee(emp1);
+		assertThat(dao.employeeExists(emp1.getLastName()), equalTo(Boolean.TRUE));
 		
 	}
 
+	@Test
+	public void employeeExist_shouldReturnFalse() {
+		dao.addEmployee(emp1);
+		assertThat(dao.employeeExists(emp2.getLastName()), equalTo(Boolean.FALSE));
+	}
 }

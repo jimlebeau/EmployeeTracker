@@ -67,9 +67,9 @@ public class EmployeeDAO implements IEmployeeDAO {
 	public boolean employeeExists(String lastName) {
 		int count = jdbcTemplate.queryForObject(EXISTS_SQL, Integer.class, lastName);
 		if (count == 0) {
-			return false;
+			return Boolean.FALSE;
 		} else {
-			return true;
+			return Boolean.TRUE;
 		}
 	}
 	
