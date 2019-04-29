@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.jrl.employeetracker.rest.exception.RecordNotFoundException;
 import com.jrl.employeetracker.rest.model.Employee;
 import com.jrl.employeetracker.rest.service.IEmployeeService;
 
