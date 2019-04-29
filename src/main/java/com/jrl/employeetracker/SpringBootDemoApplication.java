@@ -6,7 +6,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-//@ComponentScan(basePackages = {"com.jrl.employeetracker.rest"})
+@ComponentScan(basePackages = {"com.jrl.employeetracker.rest", "com.jrl.employeetracker"})
 public class SpringBootDemoApplication {
 
 	private static final Logger logger = LoggerFactory.getLogger(SpringBootDemoApplication.class);
