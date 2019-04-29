@@ -40,7 +40,7 @@ public class EmployeeController {
 	
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<Employee> getEmployeeById(@PathVariable("id") int id) {
-		logger.debug("in mapping /employees/{" + id + "}");
+//		logger.debug("in mapping /employees/{" + id + "}");
 		Employee employee = service.getEmployeeById(id);
 		
 		return new ResponseEntity<Employee>(employee, HttpStatus.OK);
@@ -61,8 +61,13 @@ public class EmployeeController {
 	
 	@PutMapping(value = "/")
 	public ResponseEntity<Employee> updateEmployee (@Valid @RequestBody Employee employee) {
-		service.updateEmployee(employee);
-		return new ResponseEntity<Employee>(employee, HttpStatus.OK);
+		
+		boolean flag = service.updateEmployee(employee);
+		if (flag == Boolean.FALSE) {
+			return new ResponseEntity<Employee>(HttpStatus.NOT_MODIFIED);
+		} else {
+			return new ResponseEntity<Employee>(employee, HttpStatus.OK);
+		}
 	}
 	
 	@DeleteMapping("/{id}")
